@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="guestbook">
+
+
+
+	<select id="getList" resultType="com.javaex.vo.GuestbookVo">
+		
+		<![CDATA[
+			select no,
+     			   name,
+    			   password pw,
+    			   content,
+     			   to_char(reg_date, 'yyyy-mm-dd hh:mi:ss') regDate
+			from guestbook
+			order by reg_date desc
+		]]>
+
+	</select>
+
+
+	<select id="write" parameterType="com.javaex.vo.GuestbookVo">
+		
+		<![CDATA[
+			insert into guestbook
+			values(seq_guestbook_no.nextval, 
+					#{name}, 
+					#{pw}, 
+					#{content}, 
+					sysdate)
+		]]>
+
+	</select>
+
+
+	<select id="delete">
+		
+		<![CDATA[
+			delete from guestbook
+			where no = #{no}
+			and password = #{pw}
+		]]>
+
+	</select>
+
+
+</mapper>
