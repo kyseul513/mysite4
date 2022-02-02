@@ -73,7 +73,7 @@
 								</tr>
 							</tbody>
 						</table>
-					<%--</form>--%>
+					<!--</form>--%>
 					<!-- //guestWrite -->
 					
 					
@@ -114,7 +114,7 @@
 	
 	//2. 저장버튼이 클릭될때 (화면 로드 후)
 	$("#btnSubmit").on("click", function(){
-		console.log("클릭")
+		//console.log("클릭")
 		
 		//2-1. 폼에 입력된 데이터를 하나로 모음
 		var name = $("#input-uname").val();
@@ -143,10 +143,10 @@
 			dataType : "json",
 			success : function(guestbookVo){	//vo객체형태로 데이터가 오니 이름을 vo로 맞춰줌.
 				/*성공시 처리해야될 코드 작성*/
-				render(guestbookVo, 'up');
+				render(guestbookVo, 'up');	//새로 입력된 값은 위에 붙어야하니 up
 				
 				//값 입력 후 폼에서 입력란 값 없애기
-				$("#input-uname").val("");
+				$("#input-uname").val("");	//아무것도 없는 문자열 넣기
 				$("#input-pass").val("");
 				$("[name='content']").val("");
 				
@@ -178,13 +178,11 @@
 				//console.log(guestbookList[0].name);		//받아온 리스트의 첫번째 데이터의 이름 출력
 				
 				
-				//여기에 리스트를 그리면 코드가 너무 길어지니 아래에 메소드로 뺌.(function render)
-				
-				
+				//여기에 리스트를 그리면 코드가 너무 길어지니 아래에 메소드로 뺌.(function render)				
 				//리스트가 여러개이니 for문으로 돌림 -> 1-1. 리스트 그리기를 시킴
 				for(var i=0; i<guestbookList.length; i++){
 					render(guestbookList[i], 'down');		//1-2. 방명록리스트 그리기. guestbookList에서 i번째에 있는 값 뽑아내기	
-				}
+				}							 //리스트 뿌리는거는 down으로...
 				
 			},
 			error : function(XHR, status, error) {
@@ -216,15 +214,15 @@
 		str += '		<td colspan=4 class="text-left">'+guestbookVo.content+'</td>';
 		str += '	</tr>';
 		str += '</table>';
-		
-		if(updown == 'down'){		//
+					  
+		if(updown == 'down'){		
 			$("#listArea").append(str);		//위에 있는 id=listArea에 위 문장(str) 넣기. html로 넣으면 계속 새로고침되니 append 사용해 뒤에 붙여주기.
 		}else if(updown == 'up'){
 			$("#listArea").prepend(str);
 		}else{
 			console.log("방향오류");
-		}
-		
+		} 
+		//down, up: 변수이름
 	};
 	
 	
