@@ -26,9 +26,25 @@ public class GuestbookService {
 		guestbookDao.write(guestbookVo);
 	}
 
-	public void delete(int no, String pw) {
+	
+	public void delete(GuestbookVo guestbookVo) {
 		
-		guestbookDao.delete(no, pw);
+		guestbookDao.delete(guestbookVo);
 
 	}
+
+	
+	//방명록 글 저장 -> 저장글 리턴
+	public GuestbookVo addGuestResultVo(GuestbookVo guestbookVo) {
+		System.out.println("GuestbookService/addGuestResultVo");
+		
+		//저장하기
+		int count = guestbookDao.insertSelectKey(guestbookVo);
+		
+		//저장한 내용 가져오기 (화면에 그리기 위해)
+		int no = guestbookVo.getNo();
+		return guestbookDao.selectGuest(no);
+	}
+			
+	
 }

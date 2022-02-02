@@ -21,6 +21,17 @@
 	</select>
 
 
+	<!-- 방명록 글1개 가져오기 -->
+	<select id="selectByNo" parameterType="int" resultType="com.javaex.vo.GuestbookVo">
+      <![CDATA[
+         select no, name, password pw, content, reg_date regDate
+         from guestbook
+         where no = #{no}
+      ]]>
+	</select>
+
+
+	<!-- 방명록 글 저장 -->
 	<select id="write" parameterType="com.javaex.vo.GuestbookVo">
 		
 		<![CDATA[
@@ -35,6 +46,25 @@
 	</select>
 
 
+	<!-- 방명록 글 저장 selectKey -->	<!-- nextval로 번호 받은걸 vo에 넣으라는 뜻.... -->
+	<insert id="insertSelectKey" parameterType="com.javaex.vo.GuestbookVo">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">  <!--before: 여러 쿼리문 중 이거를 가장 먼저 하기 -->
+						<!--이 no는 vo에 있는 필드값이어야 함.  -->
+			select seq_guestbook_no.nextval from dual	<!-- dual: 가상의 테이블 -->
+		</selectKey>
+		
+		<!-- 위에서 vo에 번호가 들어갔으니 여기서는 nextval해줄 필요 없이 그냥 no로 받으면 됨. -->
+		<![CDATA[
+			insert into guestbook
+         	values(#{no}, 	
+         		   #{name},
+         		   #{pw},
+         		   #{content},
+         		   sysdate)
+		]]>
+	</insert>
+
+
 	<select id="delete">
 		
 		<![CDATA[
@@ -44,6 +74,8 @@
 		]]>
 
 	</select>
+
+
 
 
 </mapper>
