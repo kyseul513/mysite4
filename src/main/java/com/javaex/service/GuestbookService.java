@@ -32,6 +32,20 @@ public class GuestbookService {
 		guestbookDao.delete(guestbookVo);
 
 	}
+	
+	
+	//ajax 방명록 글 삭제
+	public String remove(GuestbookVo guestbookVo) {
+		System.out.println("guestbookService/remove ajax");
+		
+		int count = guestbookDao.delete(guestbookVo);
+		
+		if(count>0) {	//성공/실패 로직은 service에서 하는게 나음.
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
 
 	
 	//방명록 글 저장 -> 저장글 리턴

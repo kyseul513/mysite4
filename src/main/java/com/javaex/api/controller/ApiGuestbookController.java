@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.javaex.service.GuestbookService;
@@ -40,7 +42,6 @@ public class ApiGuestbookController {
 	@RequestMapping("/write")
 	public GuestbookVo write(@ModelAttribute GuestbookVo guestbookVo) {	//파라미터로 온 값을 guestbookVo로 받기
 		System.out.println("ApiGuestbookController.list().write()");
-		System.out.println(guestbookVo);
 		
 		//저장하고 저장된 값 리턴
 		GuestbookVo gVo = guestbookService.addGuestResultVo(guestbookVo);
@@ -49,5 +50,30 @@ public class ApiGuestbookController {
 		return gVo;		//json으로 바꿔서 body에 붙여 보냄(@ResponseBody)
 	}
 	
+	@ResponseBody
+	@RequestMapping("/write2")
+	public GuestbookVo write2(@RequestBody GuestbookVo guestbookVo) {	//json으로 받은건 RequestBody로 명시..
+		System.out.println("ApiGuestbookController.list().write2()");
+		System.out.println(guestbookVo);
+		
+		//저장하고 저장된 값 리턴
+		GuestbookVo gVo = guestbookService.addGuestResultVo(guestbookVo);
+		System.out.println("gVo" + gVo);
+		
+		return gVo;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping("/remove")
+	public String remove(@ModelAttribute GuestbookVo guestbookVo) {
+		System.out.println("ApiGuestbookController.list().remove()");
+		System.out.println(guestbookVo);
+		
+		String result = guestbookService.remove(guestbookVo);
+		System.out.println(result);
+		
+		return result;
+	}
 	
 }

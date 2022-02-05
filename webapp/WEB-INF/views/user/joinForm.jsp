@@ -9,6 +9,8 @@
 <link href="${pageContext.request.contextPath}/assets/css/mysite.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/assets/css/user.css" rel="stylesheet" type="text/css">
 
+<script type="text/javascript" src="/mysite4/assets/js/jquery-1.12.4.js"></script>
+
 </head>
 
 <body>
@@ -109,5 +111,29 @@
 	<!-- //wrap -->
 
 </body>
+
+
+<script type="text/javascript">
+	$("#btn-submit").on("click", function(){
+		console.log("회원가입버튼 클릭");
+	
+		var id = $("#input-uid").val();
+		var pw = $("#input-pass").val();
+		
+		if(id == ""){	// null도 가능
+			alert("아이디를 입력해 주세요.");
+			return false;	//하던일을 멈춤
+		}
+		if(pw == ""){
+			alert("비밀번호를 입력해 주세요.");
+			return false;
+		}
+		
+		return true;
+	});
+	
+</script>
+
+
 
 </html>
