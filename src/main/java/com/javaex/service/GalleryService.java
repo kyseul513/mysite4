@@ -4,16 +4,24 @@ import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.javaex.dao.GalleryDao;
+import com.javaex.vo.GalleryVo;
+
 @Service
-public class FileService {
-	
-	public String restore(MultipartFile file) {
-		System.out.println("FileService.restore()");
+public class GalleryService {
+
+	@Autowired
+	private GalleryDao galleryDao;
+
+	public void restore(MultipartFile file, GalleryVo galleryVo) {
+		System.out.println("GalleryService.restore()");
 
 		String savDir = "C:\\javaStudy\\upload";
 
@@ -24,23 +32,20 @@ public class FileService {
 
 		// 확장자 추출 - 온점의 위치를 찾아서 그 이후의 값 반환.
 		String exName = orgName.substring(file.getOriginalFilename().lastIndexOf("."));
-		// file.getOriginalFilename(); 형태로도 가능
 
-		// 저장파일이름 (UUID이용해 이름을 랜덤하게 만듬)(혹시모를 중복방지 위해 현재시간+UUID 조합으로 씀)
+		// 저장파일이름
 		String saveName = System.currentTimeMillis() + UUID.randomUUID().toString() + exName;
-		//System.out.println(saveName);
 
 		// 파일패스 생성
 		String filePath = savDir + "\\" + saveName;
 
 		// 파일 사이즈
-		long fileSize = file.getSize(); // int가 아니고 long인거 주의
+		long fileSize = file.getSize();
 
-		
 		//////////////// 파일 저장(사용자입장에서는 업로드)
 		try {
 			byte[] fileData = file.getBytes();
-			OutputStream out = new FileOutputStream(filePath); // 여기에 파일 만들기..
+			OutputStream out = new FileOutputStream(filePath);
 			BufferedOutputStream bout = new BufferedOutputStream(out);
 
 			bout.write(fileData);
@@ -50,12 +55,30 @@ public class FileService {
 			e.printStackTrace();
 		}
 
-		
 		//////////////// DB에 관련정보 저장 - Gallery
+		galleryVo.setFilePath(filePath);
+		galleryVo.setOrgName(orgName);
+		galleryVo.setSaveName(saveName);
+		galleryVo.setFileSize(fileSize);
+
+		// System.out.println(galleryVo);
+
+		galleryDao.restore(galleryVo);
+
+	}
+	
+	public List<GalleryVo> list(){
 		
-		return saveName;		//세이브 파일이름 리턴
-
-
+		List<GalleryVo> gList = galleryDao.list();
+		
+		return gList;
+	}
+	
+	
+	public GalleryVo getImg(int no) {
+		
+		GalleryVo imgVo = galleryDao.getImg(no);
+		return imgVo;
 	}
 
 }

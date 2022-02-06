@@ -12,7 +12,7 @@
 <link href="${pageContext.request.contextPath }/assets/css/gallery.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath }/assets/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css">
 
-<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/bootstrap/js/bootstrap.js"></script>
 
 </head>
@@ -48,20 +48,27 @@
 			<div id="gallery">
 				<div id="list">
 			
-					
-						<button id="btnImgUpload">이미지올리기</button>
-						<div class="clear"></div>
+					<c:choose>					
+						<c:when test="${empty authUser}">					
 
-			
+						</c:when>	
+						<c:otherwise>
+							<button id="btnImgUpload">이미지올리기</button>
+							<div class="clear"></div>
+						</c:otherwise>
+					</c:choose>
+								
 					<ul id="viewArea">
 						
 						<!-- 이미지반복영역 -->
+						<c:forEach items="${gList}" var="gList">
 							<li>
 								<div class="view" >
-									<img class="imgItem" src="">
-									<div class="imgWriter">작성자: <strong>유재석</strong></div>
+									<img class="imgItem" src="${pageContext.request.contextPath}/upload/${gList.saveName}" data-no="${gList.no}">
+									<div class="imgWriter">작성자: <strong>${gList.name}</strong></div>								
 								</div>
-							</li>
+							</li> 
+						</c:forEach>
 						<!-- 이미지반복영역 -->
 						
 						
@@ -91,19 +98,20 @@
 					<h4 class="modal-title">이미지등록</h4>
 				</div>
 				
-				<form method="" action="" >
+				<form action="${pageContext.request.contextPath}/gallery/upload"  method="post" enctype="multipart/form-data" >
 					<div class="modal-body">
 						<div class="form-group">
 							<label class="form-text">글작성</label>
-							<input id="addModalContent" type="text" name="" value="" >
+							<input id="addModalContent" type="text" name="content" value="" >
 						</div>
 						<div class="form-group">
 							<label class="form-text">이미지선택</label>
-							<input id="file" type="file" name="" value="" >
+							<input id="file" type="file" name="file" value="" >
 						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="submit" class="btn" id="btnUpload">등록</button>
+						<input type = "hidden" name = "userNo" value = "${authUser.no}" >
 					</div>
 				</form>
 				
@@ -137,6 +145,7 @@
 					<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
 					<button type="button" class="btn btn-danger" id="btnDel">삭제</button>
+					<input type="text" id ="uNo" value="">
 				</div>
 				
 				
@@ -150,8 +159,61 @@
 </body>
 
 <script type="text/javascript">
+	$("#btnImgUpload").on("click", function(){
+		console.log("이미지올리기 버튼 클릭")
+		
+		$("#addModal").modal();
+		
+	});
+	
+	$(".imgItem").on("click", function(){
+		console.log("이미지 클릭")
+		var $this = $(this);
+		var no = $this.data("no");
 
-
+		console.log(no);
+		
+		$("#viewModal").modal();
+		
+		
+		$.ajax({
+			//요청
+			url : "${pageContext.request.contextPath}/gallery/getImg",	
+			type : "post",
+			//contentType : "application/json",
+			data : {no: no},
+			
+			//응답
+			dataType : "json",
+			success : function(imgVo){
+				console.log(imgVo);
+				
+				//이미지보기 팝업에 관련 정보 넣기
+				$("#viewModelImg").attr("src", "${pageContext.request.contextPath}/upload/"+imgVo.saveName);
+				$("#viewModelContent").text(imgVo.content);
+				$("#uNo").val(imgVo.userNo);
+				
+				
+				//삭제버튼
+				if(imgVo.userNo == ${authUser.no}){
+					
+					$("#btnDel").modal();	
+					
+				}else{
+					
+					$("#btnDel").modal("hide");
+				}
+				
+				},
+				error : function(XHR, status, error) {
+					console.error(status + " : " + error);
+				}
+					
+		})
+		
+	});
+	
+	
 
 </script>
 
