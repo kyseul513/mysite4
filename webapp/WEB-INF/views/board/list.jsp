@@ -63,8 +63,8 @@
 									<th>작성일</th>
 									<th>관리</th>
 								</tr>
-							</thead>
-							<c:forEach items="${boardList}" var="vo">
+							</thead>			<!-- requestScope은 생략가능 -->
+							<c:forEach items="${requestScope.pMap.boardList}" var="vo">
 							<tbody>
 								<tr>
 									<td>${vo.no}</td>	<!-- vo상 이름 입력. -->
@@ -83,18 +83,18 @@
 
 						<div id="paging">
 							<ul>
-								<li><a href="">◀</a></li>
-								<li class="active"><a href="">1</a></li>
-								<li><a href="">2</a></li>
-								<li><a href="">3</a></li>
-								<li><a href="">4</a></li>
-								<li><a href="">5</a></li>
-								<li><a href="">6</a></li>
-								<li><a href="">7</a></li>
-								<li><a href="">8</a></li>
-								<li><a href="">9</a></li>
-								<li><a href="">10</a></li>
-								<li><a href="">▶</a></li>
+								<c:if test = "${requestScope.pMap.prev == true}">
+									<li><a href="${pageContext.request.contextPath}/board/list2?crtPage=${pMap.startPageBtnNo-1}">◀</a></li>
+								</c:if>
+																																			<!-- var: 변수. 돌아가고 있는 값을 넣어줌 -->
+								<c:forEach begin = "${requestScope.pMap.startPageBtnNo}" end = "${requestScope.pMap.endPageBtnNo}" step="1" var="page">
+																																  <!-- step:한번 돌 때 숫자가 얼마씩 올라가는지 -->	
+									<li class="active"><a href="${pageContext.request.contextPath}/board/list2?crtPage=${page}">${page}</a></li><!-- 번호 클릭시 해당 페이지로 이동 -->
+								</c:forEach>
+					
+								<c:if test = "${requestScope.pMap.next == true}">
+								<li><a href="${pageContext.request.contextPath}/board/list2?crtPage=${pMap.endPageBtnNo+1}">▶</a></li>
+								</c:if>
 							</ul>
 
 

@@ -214,6 +214,12 @@
 	});
 	
 	
+	${"#btnDel"}.on("click", function(){
+		console.log("삭제버튼 클릭")
+		
+		
+	});
+	
 
 </script>
 

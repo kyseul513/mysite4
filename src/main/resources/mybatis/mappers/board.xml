@@ -21,6 +21,44 @@
 	</select>
 	
 	
+	<!-- 글리스트 가져오기(리시트 + 페이징 -->
+	<!-- map이면 getter가 아니라 dao에서의 key값으로 입력(startRnum endRnum) -->
+	<select id="selectList2" parameterType="map" resultType="com.javaex.vo.BoardVo">
+		<![CDATA[
+			select rt.rn,
+				   rt.no,
+			       rt.title,
+			       rt.content,
+			       rt.hit,
+			       rt.reg_date,
+			       rt.user_no,
+			       rt.name
+			from (select rownum rn,
+						 ot.no,
+			             ot.title,
+			             ot.content,
+			             ot.hit,
+			             ot.reg_date,
+			             ot.user_no,
+			             ot.name
+			      from (select b.no,
+			                   b.title,
+			                   b.content,
+			                   b.hit,
+			                   to_char(b.reg_date, 'yyyy-mm-dd hh:mi:ss') reg_date,
+			                   b.user_no,
+			                   u.name
+			             from board b, users u
+			             where b.user_no = u.no
+			             order by b.no desc
+			             )ot
+			      )rt
+			where rn>=#{startRnum}
+			and rn<=#{endRnum}		
+		]]>	
+	</select>
+	
+	
 	<select id="delete" parameterType="int">	
 		<![CDATA[
 			delete from board
@@ -66,6 +104,17 @@
 				   #{no})		
 		]]>	
 	</select>
+	
+	
+	<!-- 전체 글 카운트 -->
+	<select id="totalCnt" resultType="int">
+		<![CDATA[
+			select count(*)
+			from board b, users u
+			where b.user_no = u.no
+		]]>	
+	</select>
+	
 	
 
 </mapper>
