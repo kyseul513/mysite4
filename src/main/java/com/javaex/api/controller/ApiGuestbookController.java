@@ -49,6 +49,7 @@ public class ApiGuestbookController {
 		return gVo;		//json으로 바꿔서 body에 붙여 보냄(@ResponseBody)
 	}
 	
+	//방명록 글 저장 -> 저장글 리턴
 	@ResponseBody
 	@RequestMapping("/write2")
 	public GuestbookVo write2(@RequestBody GuestbookVo guestbookVo) {	//json으로 받은건 RequestBody로 명시..

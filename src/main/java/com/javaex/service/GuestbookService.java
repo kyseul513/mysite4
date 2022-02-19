@@ -53,7 +53,7 @@ public class GuestbookService {
 		System.out.println("GuestbookService/addGuestResultVo");
 		
 		//저장하기
-		int count = guestbookDao.insertSelectKey(guestbookVo);
+		guestbookDao.insertSelectKey(guestbookVo);
 		
 		//저장한 내용 가져오기 (화면에 그리기 위해)
 		int no = guestbookVo.getNo();
